@@ -47,6 +47,19 @@ block on any violation.
 ### Audit
 - Is every privileged/state-changing action audited (who/what/when UTC/tenant/outcome)?
 
+## Additional Considerations 
+Review only:
+
+* authentication
+* authorization
+* tenant boundaries
+* secrets
+* file handling
+* injection risks
+* logging
+* dependency risk
+* AI-specific threats
+
 ## Output
 A findings list categorized **blocker / should-fix / nit**, each with file:line and a
 concrete remediation. Approve only when no blockers remain.
