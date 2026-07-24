@@ -31,6 +31,17 @@ feature code in this skill — produce the plan only.
 6. **Write the plan.** Ordered steps, files to touch, risks/open questions, and the
    sequence of slices. Confirm the plan honors every rule in `.claude/rules/`.
 
+## Additional Considerations
+Must:
+
+1. Read the GitHub issue.
+2. Read relevant documentation.
+3. Inspect existing code.
+4. Identify affected modules.
+5. Identify risks.
+6. Produce an implementation plan.
+7. Wait for approval before coding
+
 ## Output
 A markdown plan: summary, ACs, per-layer impact, the first vertical slice, test
 list, and open questions. No code changes.
