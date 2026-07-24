@@ -29,6 +29,19 @@ provider and normalizes into the canonical PlatformTrust event schema.
 8. **Elevation (only if required).** Any write/remediation scope must be explicit,
    human-approved, and audited — never default.
 
+## Additional Considerations 
+Must:
+
+* Follow the connector interface
+* Use read-only permissions
+* Add connection testing
+* Add pagination
+* Add retry handling
+* Normalize events
+* Add mock provider tests
+* Document permissions
+* Create threat-model notes
+
 ## Definition of Done
 Read-only by default, provider formats contained in the adapter, events normalized
 and schema-validated, tenant-scoped, tests green (including malformed payloads),
