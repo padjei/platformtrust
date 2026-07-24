@@ -30,6 +30,16 @@ immutable.
    both directions. Verify RLS actually isolates tenants.
 7. **Do not** run schema changes directly against any database outside the migration.
 
+## Additional Considerations 
+Must:
+
+* Review current schema
+* Generate a reversible migration
+* Add indexes
+* verify tenant isolation
+* Test upgrade and downgrade
+* Never edit previously released migrations
+
 ## Definition of Done
 New (never edited) revision, reversible, tenant-owned tables have `tenant_id` + RLS
 + policy + indexes, UUID PKs, UTC `timestamptz`, up/down tested.
