@@ -28,6 +28,19 @@ Final gate before release. All checks must pass; do not bypass failures.
 5. **Confirm environment/config** (Key Vault refs, env vars) are set for the target
    environment; no local-only shortcuts shipped.
 
+## Additional Considerations 
+Run:
+
+* linting
+* type checking
+* unit tests
+* integration tests
+* end-to-end tests
+* dependency scanning
+* secret scanning
+* migration validation
+* final diff review
+
 ## Output
 A go/no-go summary: `make verify` result, DoD checklist status, and any outstanding
 blockers. Release only on a clean pass.
