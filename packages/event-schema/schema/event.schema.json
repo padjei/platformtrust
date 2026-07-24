@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://platformtrust.ai/schemas/event.schema.json",
+  "title": "PlatformTrust Event Envelope",
+  "description": "Normalized event envelope that all connectors emit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "tenant_id",
+    "source",
+    "event_type",
+    "occurred_at",
+    "ingested_at",
+    "payload",
+    "schema_version"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique event identifier."
+    },
+    "tenant_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Owning tenant. Required on every event."
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Connector or provider that produced the event."
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Normalized event type."
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the event happened at the source (UTC ISO-8601)."
+    },
+    "ingested_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When PlatformTrust ingested the event (UTC ISO-8601)."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Normalized, provider-specific event data."
+    },
+    "schema_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Version of the envelope schema.",
+      "examples": ["1.0.0"]
+    }
+  }
+}

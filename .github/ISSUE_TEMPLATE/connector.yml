@@ -1,0 +1,80 @@
+name: New connector request
+description: Request a new data connector for AI PlatformTrust
+title: "[Connector]: "
+labels: ["connector"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request a new connector. Connectors must be read-only
+        and respect tenant isolation.
+
+  - type: input
+    id: connector-name
+    attributes:
+      label: Connector name
+      description: The name for this connector.
+      placeholder: e.g. GitHub, Okta, Snowflake
+    validations:
+      required: true
+
+  - type: input
+    id: provider
+    attributes:
+      label: Provider
+      description: The vendor / service and relevant product tier or API version.
+      placeholder: e.g. GitHub Cloud REST API v2022-11-28
+    validations:
+      required: true
+
+  - type: textarea
+    id: data-types
+    attributes:
+      label: Data types
+      description: What entities and data will be ingested?
+      placeholder: |
+        - Users / identities
+        - Audit logs
+        - Repositories / assets
+    validations:
+      required: true
+
+  - type: dropdown
+    id: auth-method
+    attributes:
+      label: Auth method
+      description: How does the connector authenticate?
+      options:
+        - OAuth 2.0
+        - API key / token
+        - Service account
+        - Mutual TLS
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: read-only
+    attributes:
+      label: Read-only confirmation
+      options:
+        - label: This connector will only read data; it performs no writes or mutations on the provider.
+          required: true
+
+  - type: textarea
+    id: normalization
+    attributes:
+      label: Event normalization notes
+      description: How should events map to the platform's normalized model?
+      placeholder: Field mappings, timestamp handling, dedup keys, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: rate-limits
+    attributes:
+      label: Rate limits
+      description: Known provider rate limits and pagination constraints.
+      placeholder: e.g. 5000 req/hour, cursor-based pagination
+    validations:
+      required: true

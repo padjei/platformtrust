@@ -1,0 +1,99 @@
+name: Migrations
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "services/api/migrations/**"
+      - "services/api/alembic.ini"
+
+concurrency:
+  group: migrations-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    name: Apply migrations on fresh database
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/api
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: platformtrust_migrations
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/platformtrust_migrations
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            services/api/requirements.txt
+            services/api/requirements-dev.txt
+            services/api/pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e ".[dev]"; fi
+
+      - name: Apply migrations (alembic upgrade head)
+        run: alembic upgrade head
+
+      - name: Verify migrations reach a single head
+        run: |
+          heads=$(alembic heads | grep -c '(head)' || true)
+          if [ "$heads" -ne 1 ]; then
+            echo "Expected exactly one migration head, found $heads."
+            alembic heads
+            exit 1
+          fi
+
+      - name: Ensure existing migration files were not modified
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          echo "Comparing committed migration files against base $BASE_SHA"
+          # Existing migration files on the base branch must be identical on this PR.
+          existing_files=$(git ls-tree -r --name-only "$BASE_SHA" -- services/api/migrations/versions || true)
+          if [ -z "$existing_files" ]; then
+            echo "No pre-existing migration files on base; nothing to verify."
+            exit 0
+          fi
+          changed=$(git diff --name-only "$BASE_SHA" HEAD -- services/api/migrations/versions)
+          violations=""
+          for f in $existing_files; do
+            if echo "$changed" | grep -qx "$f"; then
+              violations="$violations $f"
+            fi
+          done
+          if [ -n "$violations" ]; then
+            echo "The following already-committed migration files were modified:"
+            for v in $violations; do echo "  - $v"; done
+            echo "Existing migrations are immutable; add a new migration instead."
+            exit 1
+          fi
+          echo "No existing migration files were modified."
