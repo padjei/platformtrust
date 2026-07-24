@@ -40,3 +40,17 @@ Security is non-negotiable. Every privileged action is authorized server-side an
 - **Don't** state or imply the product provides certification, legal compliance
   guarantees, or that an LLM's judgment establishes compliance/risk/pass status.
   The platform assesses and reports; humans and deterministic rules decide.
+
+## Additional Considerations 
+* No secrets in source control
+* No PII in logs
+* Server-side authorization
+* Tenant isolation testing
+* Read-only connectors by default
+* SSRF protection
+* File upload validation
+* Rate limiting
+* Audit logging
+* Dependency scanning
+* Secure error responses
+* No production database access from local Claude sessions
