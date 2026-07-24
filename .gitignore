@@ -1,0 +1,50 @@
+# --- Python ---
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Note: apps/web and services/api may each emit dist/ - covered above.
+
+# --- Environment / secrets ---
+.env
+.env.local
+.env.*.local
+*.local
+!.env.example
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# --- IDE / editor ---
+.vscode/
+.idea/
+.DS_Store
+
+# --- Test / build artifacts ---
+playwright-report/
+test-results/
+.coverage
+coverage.xml
+htmlcov/
+junit.xml

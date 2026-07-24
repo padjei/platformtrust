@@ -1,0 +1,29 @@
+[
+  {
+    "id": "GOV-001",
+    "domain": "governance",
+    "title": "AI use policy documented",
+    "description": "The organization maintains a documented, approved policy governing acceptable AI use.",
+    "weight": 3,
+    "severity": "high",
+    "evidence_required": ["policy_document", "approval_record"]
+  },
+  {
+    "id": "SEC-002",
+    "domain": "security",
+    "title": "Access to AI systems is least-privilege",
+    "description": "Access to AI models, datasets, and pipelines follows least-privilege and is reviewed periodically.",
+    "weight": 4,
+    "severity": "critical",
+    "evidence_required": ["access_control_config", "access_review_log"]
+  },
+  {
+    "id": "DATA-003",
+    "domain": "data",
+    "title": "Training data provenance recorded",
+    "description": "Provenance and licensing of datasets used for training or fine-tuning are documented.",
+    "weight": 2,
+    "severity": "medium",
+    "evidence_required": ["dataset_inventory", "data_lineage_record"]
+  }
+]

@@ -1,0 +1,70 @@
+name: Feature request
+description: Propose a new feature or enhancement for AI PlatformTrust
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a feature. Please fill out the sections below so we can
+        scope, prioritize, and align it with the Definition of Done.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A concise description of the feature and the problem it solves.
+      placeholder: What should be built and why?
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User story
+      description: Describe the value from the user's perspective.
+      placeholder: As a <role>, I want <capability> so that <benefit>.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Testable conditions that define "done".
+      placeholder: |
+        - [ ] Given ... when ... then ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: affected-areas
+    attributes:
+      label: Affected areas
+      description: Select all parts of the platform this feature touches.
+      options:
+        - label: Database (schema / RLS)
+        - label: API (services/api)
+        - label: UI (apps/web)
+        - label: Security / tenancy
+        - label: Testing
+        - label: Migration required
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What this feature explicitly does NOT include.
+      placeholder: List anything intentionally excluded to avoid scope creep.
+    validations:
+      required: false
+
+  - type: textarea
+    id: related
+    attributes:
+      label: Related ADRs / docs
+      description: Link any relevant architecture decision records, designs, or docs.
+      placeholder: e.g. docs/adr/0007-tenant-isolation.md, #123
+    validations:
+      required: false
