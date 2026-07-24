@@ -33,3 +33,15 @@ LLMs assist with explanation and drafting. They never hold authority.
 ## Transparency
 - **Do** clearly label AI-generated explanations/suggestions as advisory in the UI.
 - **Don't** imply AI output constitutes certification or a compliance guarantee.
+
+## Additional Considerations
+* Structured outputs
+* Evidence citations
+* Confidence indicators
+* No unsupported compliance conclusions
+* No deterministic decisions delegated to the LLM
+* Prompt injection handling
+* Customer-data isolation
+* Model-provider abstraction
+* Token and cost limits
+* Human approval for sensitive actions
