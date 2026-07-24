@@ -33,3 +33,15 @@ PostgreSQL with Row-Level Security is the backbone of tenant isolation.
 - **Don't** make schema changes directly against a database outside of a migration.
 - **Don't** put destructive data changes in the same migration as structural ones
   without an explicit, reviewed reason.
+
+## Additional Considerations 
+* tenant_id required
+* PostgreSQL RLS required
+* UUID primary keys
+* Migration naming convention
+* Index expectations
+* Soft-delete policy
+* Timestamp policy
+* Transaction boundaries
+* Idempotency requirements
+* No destructive migration without explicit approval
