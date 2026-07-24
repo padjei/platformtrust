@@ -18,6 +18,7 @@ node_modules/
 out/
 coverage/
 *.tsbuildinfo
+next-env.d.ts
 
 # Note: apps/web and services/api may each emit dist/ - covered above.
 

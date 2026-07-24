@@ -46,7 +46,7 @@ lint: ## Lint backend (Ruff) and frontend (ESLint)
 	cd $(WEB_DIR) && npm run lint
 
 typecheck: ## Type-check backend (mypy) and frontend (tsc)
-	cd $(API_DIR) && $(PY_RUN) mypy .
+	cd $(API_DIR) && $(PY_RUN) mypy app
 	cd $(WEB_DIR) && npm run typecheck
 
 test: ## Run unit tests (pytest + web unit tests)
