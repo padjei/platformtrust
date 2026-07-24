@@ -31,6 +31,19 @@ an **adapter, never a core dependency**.
 - **Do** make ingestion idempotent (dedupe on stable external ids).
 - **Don't** let one provider outage cascade into core platform failure.
 
+## Additional Considerations
+* Implement the connector SDK contract
+* OAuth or customer-controlled credentials
+* Read-only scopes first
+* Cursor-based incremental collection
+* Rate-limit handling
+* Exponential backoff
+* Idempotency
+* Provider capability detection
+* Event normalization
+* Structured error classification
+* Connector contract tests
+
 ## Testing
 - **Do** test parsing of valid, malformed, and hostile payloads, plus the
   normalization mapping. See `testing.md`.
