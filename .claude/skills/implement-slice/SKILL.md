@@ -5,8 +5,9 @@ description: Implement the smallest complete vertical slice for an AI PlatformTr
 
 # Implement a Vertical Slice
 
-Deliver one thin, end-to-end, tested slice (DB → API → UI) rather than a broad,
+Deliver one thin, end-to-end, tested slice rather than a broad,
 untested change.
+Database → API → Authorization → UI → Tests → Documentation
 
 ## Preconditions
 - A plan exists (see `plan-feature`) and the target slice is identified.
