@@ -1,8 +1,0 @@
-Block access to .env and credential files
-Block destructive shell commands
-Block direct changes to released migrations
-Run formatting after edits
-Run targeted tests after backend changes
-Prevent commits containing secrets
-Warn when code touches authorization modules
-Prevent direct production deployment commands
