@@ -34,6 +34,12 @@
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-push-to-main.sh",
             "timeout": 10,
             "statusMessage": "Checking push target..."
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-destructive-shell.sh",
+            "timeout": 10,
+            "statusMessage": "Checking for destructive commands..."
           }
         ]
       },
@@ -45,6 +51,17 @@
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-committed-migrations.sh",
             "timeout": 10,
             "statusMessage": "Checking migration immutability..."
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-credential-file-access.sh",
+            "timeout": 10,
+            "statusMessage": "Checking for credential access..."
           }
         ]
       }
@@ -64,6 +81,18 @@
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/auto-format.sh 2>/dev/null || true",
             "timeout": 30,
             "statusMessage": "Formatting..."
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/run-targeted-backend-tests.sh 2>/dev/null || true",
+            "timeout": 120,
+            "statusMessage": "Running targeted backend tests..."
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/warn-authorization-changes.sh 2>/dev/null || true",
+            "timeout": 10,
+            "statusMessage": "Checking authorization-sensitive changes..."
           }
         ]
       }
