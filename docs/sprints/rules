@@ -1,0 +1,9 @@
+## Sprint Rules
+
+
+Work must not enter a sprint without acceptance criteria.
+Sprint scope changes must be documented.
+Blocked work must identify the blocker and owner.
+Incomplete work returns to the backlog unless explicitly carried forward.
+A sprint is not complete solely because code was written.
+Completed work must satisfy the PlatformTrust Definition of Done.
