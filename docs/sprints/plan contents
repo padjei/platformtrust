@@ -1,0 +1,11 @@
+## Every SPRINT_PLAN.md must define:
+Sprint number.
+Sprint dates.
+Sprint goal.
+Included epics.
+Included GitHub issues.
+Dependencies.
+Risks.
+Capacity assumptions.
+Exit criteria.
+Release implications.
