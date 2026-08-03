@@ -1,9 +1,4 @@
 
-//---
-
-## `docs/database/README.md`
-
-//```md
 # PlatformTrust Database Documentation
 
 This directory contains PlatformTrust data architecture, schemas, entity
