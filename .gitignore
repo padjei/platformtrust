@@ -12,15 +12,20 @@ __pycache__/
 build/
 dist/
 
-# --- Node / Next.js ---
+# --- Node / Next.js / Turborepo ---
 node_modules/
 .next/
 out/
 coverage/
 *.tsbuildinfo
 next-env.d.ts
+.turbo/
 
-# Note: apps/web and services/api may each emit dist/ - covered above.
+# Note: apps and packages may each emit dist/ - covered above.
+
+# --- Python / uv ---
+# uv.lock IS committed (reproducibility); the virtualenv is not.
+apps/ai-service/.venv/
 
 # --- Environment / secrets ---
 .env

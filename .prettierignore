@@ -1,0 +1,20 @@
+# Build output and caches
+**/dist/**
+**/.next/**
+**/coverage/**
+**/.turbo/**
+**/node_modules/**
+
+# Lockfiles
+pnpm-lock.yaml
+**/uv.lock
+
+# Python
+**/.venv/**
+**/__pycache__/**
+**/.ruff_cache/**
+**/.mypy_cache/**
+**/.pytest_cache/**
+
+# Generated
+**/*.tsbuildinfo
