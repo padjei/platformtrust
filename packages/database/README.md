@@ -1,37 +1,43 @@
-# PlatformTrust Database Package
+# @platformtrust/database
 
-This package provides shared database access, schemas, migrations,
-transactions, and tenant-safe persistence utilities.
+Boundary package for shared database access in PlatformTrust.
 
-## Responsibilities
+## IMPORTANT: configuration contracts only — no ORM, no client
 
-- Database client configuration.
-- Schema definitions.
-- Migration management.
-- Transaction helpers.
-- Tenant-scoped query helpers.
-- Repository abstractions where justified.
-- Database test utilities.
-- Seed data for approved development scenarios.
+> This package currently exposes **configuration interfaces only**. It does
+> **not** install or configure an ORM, open connections, define schemas or
+> migrations, or hold any credentials.
 
-## Rules
+The concrete ORM/driver selection and connection strategy are **deferred to a
+future ADR** (see `CLAUDE.md`: "Database/ORM selection is deferred to a future
+ADR"). This package exists now to reserve the boundary and to give other
+packages a stable place to reference database _configuration shapes_.
 
-- All tenant-owned queries must apply tenant scope.
-- Raw queries require explicit review.
-- Production schema changes require migrations.
-- Destructive migrations require an approved migration plan.
-- Database credentials must come from secure runtime configuration.
-- Business services must not construct unauthorized cross-tenant queries.
-- Database errors must be translated before reaching public APIs.
+## Exported contracts
 
-## Planned Contents
+- `DatabaseConfig` — the shape of a shared database connection configuration
+  (engine, host, port, database, user, optional credential reference, SSL mode,
+  pool hints). No value of this type opens a connection.
+- `DatabasePoolConfig` — placeholder connection-pool sizing hints.
+- `DatabaseEngine` — anticipated engine family (`'postgres'`).
+- `DatabaseSslMode` — `'disable' | 'require' | 'verify-full'`.
 
-```text
-src/
-├── client/
-├── schema/
-├── migrations/
-├── repositories/
-├── tenancy/
-├── transactions/
-└── testing/
+## Planned scope (once the ADR lands)
+
+Per the platform rules, the eventual implementation will provide tenant-safe
+persistence utilities. Tenant isolation MUST be enforced with PostgreSQL
+Row-Level Security and server-side tenant context; every tenant-owned table will
+carry `tenant_id UUID NOT NULL`, use UUID primary keys, and store timestamps as
+`timestamptz` in UTC. None of that is implemented here yet.
+
+## Boundary / what does NOT belong here
+
+- No ORM/driver dependency, connection pool, or live client.
+- No schema definitions, migrations, or repositories.
+- No credentials, connection strings, or secrets — those come from secure
+  runtime configuration (e.g. Azure Key Vault) at deploy time.
+
+## Testing
+
+No runtime behavior exists yet, so this package has no tests; `test` and
+`test:coverage` are intentional no-ops.

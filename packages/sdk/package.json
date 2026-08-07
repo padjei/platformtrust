@@ -1,0 +1,27 @@
+{
+  "name": "@platformtrust/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "echo \"no tests\" && exit 0",
+    "test:coverage": "echo \"no tests\" && exit 0",
+    "clean": "rimraf dist coverage .turbo"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "rimraf": "6.0.1",
+    "typescript": "5.7.2"
+  }
+}
