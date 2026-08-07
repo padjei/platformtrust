@@ -40,11 +40,19 @@ Frontend:
 - Zod
 
 Backend:
-- Python
+- TypeScript
+- NestJS (primary API and standalone worker)
+
+AI service (separate process):
+- Python 3.12
 - FastAPI
-- Pydantic
-- SQLAlchemy
-- Alembic
+- uv
+
+> Superseded by [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md)
+> (Accepted, PT-001, with architecture review). The primary backend is now NestJS
+> (TypeScript); FastAPI is scoped to the separate AI service. The previously
+> approved Python/FastAPI/Pydantic/SQLAlchemy/Alembic backend no longer applies.
+> Database/ORM selection is deferred to a future ADR.
 
 Data:
 - PostgreSQL
