@@ -19,6 +19,21 @@ export default tseslint.config(
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  // Node globals for root-level scripts and config files (ESM and CJS).
+  {
+    files: ['scripts/**/*.{js,mjs,cjs}', '**/*.config.{js,mjs,cjs}', '*.{mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        URL: 'readonly',
+        module: 'writable',
+        require: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
+  },
   {
     rules: {
       '@typescript-eslint/no-unused-vars': [

@@ -30,6 +30,7 @@ Read `docs/product/MVP_SCOPE.md` before planning any feature.
 ## Approved Stack
 
 Frontend:
+
 - Next.js
 - React
 - TypeScript
@@ -40,10 +41,12 @@ Frontend:
 - Zod
 
 Backend:
+
 - TypeScript
 - NestJS (primary API and standalone worker)
 
 AI service (separate process):
+
 - Python 3.12
 - FastAPI
 - uv
@@ -55,12 +58,14 @@ AI service (separate process):
 > Database/ORM selection is deferred to a future ADR.
 
 Data:
+
 - PostgreSQL
 - PostgreSQL Row-Level Security
 - Azure Blob Storage for evidence files
 - Redis only when justified
 
 Infrastructure:
+
 - Docker
 - Azure Container Apps
 - Azure Database for PostgreSQL
@@ -69,6 +74,7 @@ Infrastructure:
 - GitHub Actions
 
 Testing:
+
 - Pytest
 - Playwright
 - Testcontainers
@@ -111,6 +117,7 @@ Testing:
 - No compliance or certification claim may be added without documented proof.
 
 Read:
+
 - `docs/security/THREAT_MODEL.md`
 - `docs/security/TENANT_ISOLATION.md`
 - `.claude/rules/security.md`
@@ -194,3 +201,65 @@ Do not:
 - Security model: `docs/security/THREAT_MODEL.md`
 - Readiness domains: `docs/frameworks/READINESS_DOMAINS.md`
 - Scoring model: `docs/frameworks/SCORING_MODEL.md`
+
+## PT-001 / Implementation Rules
+
+These rules apply to every implementation task and complement (do not replace)
+the sections above.
+
+### Required reading before implementing
+
+Before proposing or making changes, read:
+
+- `docs/constitution/PLATFORMTRUST_CONSTITUTION.md`
+- `docs/handbook/ENGINEERING_HANDBOOK.md`
+- The relevant Architecture Decision Records in `docs/adr/`
+- The complete implementation issue — every acceptance criterion and every
+  linked document — not just the title or summary.
+
+### Never invent product behavior
+
+Do not invent or assume any of the following; derive them only from the issue,
+the constitution, the handbook, ADRs, or existing code, and stop to ask if they
+are unspecified:
+
+- Product behavior or feature semantics
+- Permissions, roles, or authorization rules
+- Database schemas, columns, or relationships
+- API endpoints, contracts, or response shapes
+- Tenant rules or isolation boundaries
+- AI/LLM authority (an LLM never decides pass/fail, authorization, compliance,
+  or scoring)
+- UX flows, copy, or component behavior
+
+### Invariants to preserve
+
+Every change must preserve:
+
+- **Multi-tenancy** — `tenant_id` on tenant-owned data, enforced in API and RLS.
+- **Deny-by-default authorization** — access is denied unless explicitly granted,
+  enforced server-side.
+- **Auditability** — privileged/state-changing actions produce audit events.
+- **Accessibility** — user-facing changes meet accessibility expectations
+  (keyboard, screen-reader, contrast, explicit loading/empty/error states).
+- **Testability** — code is structured to be tested; new behavior ships with
+  tests, including tenant-isolation and authorization-failure coverage.
+- **Observability** — meaningful, structured logging (no secrets/PII) and
+  surfaced errors.
+
+### Stop and report material conflicts
+
+If the issue conflicts with the constitution, handbook, ADRs, existing behavior,
+or these invariants — or if a requirement is ambiguous or appears to require
+inventing behavior — stop and report the conflict instead of guessing or working
+around it.
+
+### Scope, secrets, and validation
+
+- Make no unrelated modifications; keep the diff scoped to the issue.
+- Never commit secrets, credentials, tokens, PII, or customer data.
+- Before declaring work complete, run all required validation:
+  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`,
+  `node scripts/check-app-boundaries.mjs`, and — for `apps/ai-service` —
+  `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy .`, and
+  `uv run pytest`.

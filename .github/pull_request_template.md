@@ -1,10 +1,18 @@
-# Summary
+<!--
+  Thank you for your contribution. Fill out every relevant section.
+  Delete sections that genuinely do not apply, and write "N/A" where an impact
+  area was considered but has no effect. Do not include secrets, tokens, or PII.
+-->
+
+## Summary
 
 <!-- What does this PR do and why? Keep it concise. -->
 
 ## Linked issue
 
-<!-- e.g. Closes #123 -->
+<!-- Required. Reference the tracking issue, e.g. Closes PT-001 -->
+
+- Closes PT-###
 
 ## Type of change
 
@@ -14,28 +22,70 @@
 - [ ] Documentation
 - [ ] Migration
 - [ ] CI / tooling
+- [ ] Security
 
-## Definition of Done checklist
+## Implementation notes
 
-- [ ] Acceptance criteria from the linked issue are met
-- [ ] Authorization and tenant isolation (RLS) are enforced for all new paths
-- [ ] All inputs and outputs are validated (Pydantic / Zod)
-- [ ] Database migrations are included if the schema changed (Alembic)
-- [ ] Unit tests added/updated
-- [ ] Integration tests added/updated (where applicable)
-- [ ] End-to-end tests added/updated (where applicable)
-- [ ] Audit logging added for security-relevant actions
-- [ ] Error handling covers failure and edge cases
-- [ ] Documentation updated (README / ADRs / API docs)
-- [ ] `make verify` passes locally
-- [ ] No secrets, tokens, or credentials in the diff
-- [ ] No scope creep beyond the linked issue
+<!-- Key decisions, trade-offs, and anything a reviewer needs to understand the change. -->
 
-## Security & tenancy self-review
+## Constitution compliance
 
-<!-- Describe how this change preserves multi-tenant isolation and least privilege. -->
+<!-- Confirm alignment with docs/constitution/PLATFORMTRUST_CONSTITUTION.md.
+     Call out any principle this change touches (multi-tenancy, deny-by-default
+     authorization, auditability, determinism, human approval, neutrality). -->
 
-- Tenant scoping: <!-- How is the tenant boundary enforced for reads/writes? -->
-- Authorization: <!-- What roles/permissions gate this change? -->
-- Data exposure: <!-- Any risk of cross-tenant or sensitive data leakage? How mitigated? -->
-- New dependencies: <!-- Any new third-party packages? Audited? -->
+## Security impact
+
+<!-- New attack surface, authz changes, secret handling, input validation. "N/A" if none. -->
+
+## Tenant isolation impact
+
+<!-- How is the tenant boundary preserved? tenant_id scoping + RLS for any new data path. "N/A" if none. -->
+
+## Database impact
+
+<!-- Schema changes, new tables/columns, indexes. Migrations included? Reversible? "N/A" if none. -->
+
+## API impact
+
+<!-- New/changed endpoints, request/response contracts, versioning, breaking changes. "N/A" if none. -->
+
+## AI impact
+
+<!-- Any use of the AI service? Confirm LLM output does not decide pass/fail, authorization,
+     compliance, or scoring, and that machine-readable output is schema-validated. "N/A" if none. -->
+
+## UX & accessibility impact
+
+<!-- User-facing changes; loading/empty/error states; keyboard/screen-reader/contrast considerations. "N/A" if none. -->
+
+## Tests performed
+
+<!-- Unit / integration / e2e. Include tenant-isolation and authorization-failure coverage where relevant. -->
+
+## Documentation
+
+<!-- README / CONTRIBUTING / docs/ / ADRs / inline docs updated? "N/A" if none. -->
+
+## Migration steps
+
+<!-- Operational steps required to deploy (migrations, config, feature flags, backfills). "N/A" if none. -->
+
+## Rollback considerations
+
+<!-- How to safely revert this change. Any irreversible operations? "N/A" if none. -->
+
+## Screenshots
+
+<!-- For UI changes. Redact any sensitive or tenant-identifying data. -->
+
+## Checklist (Definition of Done)
+
+- [ ] References the tracking issue (PT-###)
+- [ ] `pnpm build` succeeds
+- [ ] `pnpm lint`, `pnpm format:check`, and `pnpm typecheck` pass
+- [ ] `pnpm test` passes (and `uv run pytest` for apps/ai-service if touched)
+- [ ] Architecture boundary check passes (`node scripts/check-app-boundaries.mjs`)
+- [ ] No secrets, tokens, credentials, or PII in the diff
+- [ ] Documentation updated where behavior or architecture changed
+- [ ] No unrelated changes / scope creep beyond the linked issue
