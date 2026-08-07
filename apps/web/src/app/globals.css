@@ -1,0 +1,35 @@
+:root {
+  color-scheme: light dark;
+  --pt-max-width: 48rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.5;
+}
+
+main {
+  max-width: var(--pt-max-width);
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}

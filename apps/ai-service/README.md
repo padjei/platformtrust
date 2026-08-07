@@ -1,73 +1,80 @@
 # PlatformTrust AI Service
 
-This directory contains AI-specific PlatformTrust capabilities.
+A standalone [FastAPI](https://fastapi.tiangolo.com/) service (Python 3.12,
+managed with [uv](https://docs.astral.sh/uv/)) that hosts PlatformTrust's
+AI-specific capabilities as a separate process.
 
-## Responsibilities
+This is the initial scaffold delivered under **PT-001 / FR-008**. It is
+deliberately minimal and model-neutral: it exposes only a health endpoint and
+carries **no** model-provider SDKs, embeddings, vector database, AI prompts, or
+database access. Those are added in later issues.
 
-The AI service may provide:
+## Requirements
 
-- Document analysis.
-- Control mapping.
-- Evidence classification.
-- Risk summarization.
-- Policy assistance.
-- Compliance recommendations.
-- Retrieval-augmented generation.
-- Embedding generation.
-- Model routing.
-- Prompt execution.
-- AI evaluation.
-- Explainability metadata.
+- Python 3.12 (see `.python-version`)
+- [uv](https://docs.astral.sh/uv/) installed globally
 
-## Non-Responsibilities
+This service is independent of the TypeScript workspace and has its own
+`pyproject.toml` and `uv.lock`.
 
-The AI service must not independently determine:
+## Setup
 
-- User permissions.
-- Tenant access.
-- Final compliance status.
-- Final audit conclusions.
-- Final risk acceptance.
-- Legal conclusions.
-- Destructive system actions.
-- Product behavior not defined in an approved specification.
+```bash
+cd apps/ai-service
+uv sync            # install runtime + dev dependencies from uv.lock
+```
 
-## Required AI Response Metadata
+## Configuration
 
-Where applicable, AI responses must include:
+Configuration is read from environment variables (non-secret only). All values
+are validated at startup and the service fails fast on invalid input.
 
-- Output.
-- Model identifier.
-- Prompt or template version.
-- Supporting source references.
-- Confidence or uncertainty information.
-- Safety or policy flags.
-- Execution timestamp.
-- Trace identifier.
-- Human-review requirement.
+| Variable            | Values                                        | Default |
+| ------------------- | --------------------------------------------- | ------- |
+| `PLATFORMTRUST_ENV` | `local` \| `dev` \| `staging` \| `production` | `local` |
+| `AI_SERVICE_PORT`   | integer `1`–`65535`                           | `8000`  |
+| `LOG_LEVEL`         | `debug` \| `info` \| `warn` \| `error`        | `info`  |
 
-## AI Governance Rules
+Logs are emitted as structured JSON to stdout. No secrets, host details, or
+internal configuration are logged or exposed by any endpoint.
 
-- AI output is advisory unless explicitly approved for automation.
-- High-impact actions require deterministic validation and human approval.
-- Tenant data must not cross tenant boundaries.
-- Customer data must not be used for model training without explicit approval.
-- Sensitive data must be minimized before provider submission.
-- Prompts must be version controlled.
-- Model changes require evaluation before release.
-- AI failures must fail safely.
-- Hallucinations and unsupported claims must be measurable through evaluation.
+## Run
 
-## Planned Structure
+```bash
+cd apps/ai-service
+uv run uvicorn platformtrust_ai_service.main:app --host 0.0.0.0 --port 8000
+```
 
-```text
-src/
-├── agents/
-├── prompts/
-├── retrieval/
-├── models/
-├── providers/
-├── guardrails/
-├── evaluations/
-├── telemetry/
-└── main.*
+For local auto-reload during development:
+
+```bash
+uv run uvicorn platformtrust_ai_service.main:app --reload --port 8000
+```
+
+## Health endpoint
+
+```
+GET /api/v1/health
+```
+
+Returns `200 OK` with the following JSON shape (the `timestamp` is dynamic,
+ISO-8601 UTC):
+
+```json
+{
+  "status": "ok",
+  "service": "platformtrust-ai-service",
+  "version": "0.1.0",
+  "timestamp": "2026-01-01T00:00:00+00:00"
+}
+```
+
+## Test & quality gates
+
+```bash
+cd apps/ai-service
+uv run ruff check .            # lint
+uv run ruff format --check .   # formatting
+uv run mypy .                  # static types (strict)
+uv run pytest                  # tests
+```
