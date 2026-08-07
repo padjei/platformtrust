@@ -49,31 +49,26 @@ jobs:
           fi
 
   npm-audit:
-    name: Node dependency audit (npm audit)
+    name: Node dependency audit (pnpm audit)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/web
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node 20
+      - name: Set up Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: npm
-          cache-dependency-path: apps/web/package-lock.json
+          node-version: "22"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
 
-      # Advisory during the scaffold phase: findings are reported in the log but
-      # do not block CI. The web app is not yet deployable and its dependency
-      # tree (notably Next.js) carries advisories that require major upgrades to
-      # clear. Make this a blocking gate once the frontend is actively built.
-      - name: Run npm audit (advisory)
-        run: npm audit --audit-level=high || true
+      # Advisory: findings are reported in the log but do not block CI while the
+      # apps are not yet deployable. The workspace is pnpm-based, so audit the
+      # whole workspace from the root lockfile rather than a single app.
+      # Make this a blocking gate once the frontend is actively built.
+      - name: Run pnpm audit (advisory)
+        run: pnpm audit --audit-level high || true
 
   secret-scan:
     name: Secret scanning (gitleaks)
