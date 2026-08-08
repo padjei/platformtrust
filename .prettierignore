@@ -1,0 +1,42 @@
+# Build output and caches
+**/dist/**
+**/.next/**
+**/coverage/**
+**/.turbo/**
+**/node_modules/**
+
+# Lockfiles
+pnpm-lock.yaml
+**/uv.lock
+
+# Python
+**/.venv/**
+**/__pycache__/**
+**/.ruff_cache/**
+**/.mypy_cache/**
+**/.pytest_cache/**
+
+# Generated
+**/*.tsbuildinfo
+
+# --- Excluded from the Prettier gate (not owned/introduced by PT-001) ---
+# Prose documentation, including the ratified Constitution and Engineering
+# Handbook, is not auto-reformatted (PT-001 must not rewrite those documents).
+docs/**
+# Pre-PT-001 scaffold and tooling carried over from earlier work; left as-is to
+# keep this change set focused (no unrelated reformatting).
+.claude/**
+services/**
+connectors/**
+infrastructure/**
+packages/connector-sdk/**
+packages/control-library/**
+packages/event-schema/**
+packages/shared-types/**
+docker-compose.yml
+Makefile
+.github/ISSUE_TEMPLATE/connector.yml
+.github/pull_request_template.md
+.github/workflows/claude.yml
+.github/workflows/migrations.yml
+.github/workflows/security.yml

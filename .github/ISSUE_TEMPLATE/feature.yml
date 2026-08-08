@@ -1,29 +1,39 @@
 name: Feature request
-description: Propose a new feature or enhancement for AI PlatformTrust
-title: "[Feature]: "
-labels: ["feature"]
+description: Propose a new feature or enhancement for PlatformTrust
+title: '[Feature]: '
+labels: ['type:feature']
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for proposing a feature. Please fill out the sections below so we can
-        scope, prioritize, and align it with the Definition of Done.
+        Thanks for proposing a feature. Fill out the sections below so we can scope,
+        prioritize, and align it with the Constitution and the Definition of Done.
+        Do not include secrets, credentials, PII, or real customer data.
 
   - type: textarea
     id: summary
     attributes:
       label: Summary
-      description: A concise description of the feature and the problem it solves.
-      placeholder: What should be built and why?
+      description: A concise description of the feature.
+      placeholder: What should be built, in one or two sentences?
     validations:
       required: true
 
   - type: textarea
-    id: user-story
+    id: problem
     attributes:
-      label: User story
-      description: Describe the value from the user's perspective.
+      label: Problem / user story
+      description: Describe the problem and the value from the user's perspective.
       placeholder: As a <role>, I want <capability> so that <benefit>.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: How should this work? Note any UX, API, or data considerations.
+      placeholder: Describe the intended behavior and approach.
     validations:
       required: true
 
@@ -44,12 +54,12 @@ body:
       label: Affected areas
       description: Select all parts of the platform this feature touches.
       options:
-        - label: Database (schema / RLS)
-        - label: API (services/api)
-        - label: UI (apps/web)
-        - label: Security / tenancy
-        - label: Testing
-        - label: Migration required
+        - label: Frontend (apps/web)
+        - label: Backend (apps/api, apps/worker)
+        - label: AI service (apps/ai-service)
+        - label: Infrastructure (infrastructure/, CI, deployment)
+        - label: Documentation (docs/)
+        - label: Tests
 
   - type: textarea
     id: out-of-scope
@@ -63,8 +73,8 @@ body:
   - type: textarea
     id: related
     attributes:
-      label: Related ADRs / docs
-      description: Link any relevant architecture decision records, designs, or docs.
-      placeholder: e.g. docs/adr/0007-tenant-isolation.md, #123
+      label: Related ADRs / issues
+      description: Link any relevant architecture decision records, designs, or issues.
+      placeholder: e.g. docs/adr/ADR-0002-initial-application-technology-stack.md, PT-001
     validations:
       required: false

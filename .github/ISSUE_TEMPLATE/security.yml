@@ -1,0 +1,82 @@
+name: Security concern (non-sensitive)
+description: File a non-sensitive security-related concern. Do NOT disclose active vulnerabilities here.
+title: '[Security]: '
+labels: ['type:security']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## STOP — read this before filing
+
+        **This is a PUBLIC issue tracker. Do NOT publish active vulnerabilities,
+        exploit details, proof-of-concept code, reproduction steps for an unpatched
+        flaw, secrets, tokens, or PII here.**
+
+        If you have found an exploitable vulnerability, report it **privately**:
+
+        - Use the private reporting channel described in
+          [SECURITY.md](https://github.com/padjei/platformtrust/blob/main/SECURITY.md).
+        - Do not post reproduction steps or exploit details in this issue.
+
+        Use this template ONLY for non-sensitive, already-mitigated, or general
+        hardening topics that are safe to discuss in public.
+
+  - type: checkboxes
+    id: acknowledgement
+    attributes:
+      label: Disclosure acknowledgement
+      description: You must confirm this before submitting.
+      options:
+        - label: >-
+            I confirm this issue contains NO active vulnerability details, exploit
+            code, reproduction steps for an unpatched flaw, secrets, or PII, and that
+            I will report exploitable vulnerabilities privately via SECURITY.md.
+          required: true
+
+  - type: textarea
+    id: impact-summary
+    attributes:
+      label: Impact summary (non-sensitive)
+      description: >-
+        Describe the concern at a high level WITHOUT sensitive detail. Focus on the
+        risk, not how to exploit it.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-area
+    attributes:
+      label: Affected area
+      options:
+        - Frontend (apps/web)
+        - Backend API (apps/api)
+        - Worker (apps/worker)
+        - AI service (apps/ai-service)
+        - Infrastructure / CI
+        - Dependencies
+        - Documentation
+        - Other / unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity (your assessment)
+      options:
+        - Informational
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-handling
+    attributes:
+      label: Suggested handling
+      description: >-
+        Proposed mitigation, hardening, or next steps. Keep it non-sensitive.
+    validations:
+      required: false

@@ -1,46 +1,41 @@
-# PlatformTrust Authentication and Authorization Package
+# @platformtrust/auth
 
-This package provides shared identity, authentication, authorization, and
-tenant-context capabilities.
+Shared identity, tenant-context, and authorization **type contracts** for
+PlatformTrust.
 
-## Responsibilities
+## IMPORTANT: contracts only — nothing is implemented
 
-- Authentication primitives.
-- Session and token validation.
-- Tenant-context resolution.
-- Role-based access control.
-- Attribute-based access control.
-- Permission definitions.
-- Policy evaluation interfaces.
-- Service identity support.
-- Authorization test utilities.
+> This package contains **interfaces and types only**. It implements **no
+> authentication and no authorization**. Importing these types does not
+> authenticate a caller and does not authorize any action.
 
-## Security Principles
+The types here describe the _shape_ of concepts the platform will use once a real
+auth layer exists. Actual authentication and **server-side** authorization —
+deny by default, least privilege, tenant isolation enforced server-side — must be
+implemented in the API/service layers. The concrete auth provider selection is
+**deferred to a future ADR**.
 
-- Deny by default.
-- Apply least privilege.
-- Authenticate every protected request.
-- Authorize every protected action.
-- Never rely on hidden UI elements as access control.
-- Never accept client-supplied roles or permissions as authoritative.
-- Include tenant context in authorization decisions.
-- Record security-relevant authorization events.
+## Exported contracts
 
-## Package Boundary
+- `AuthenticatedPrincipal` — the shape of an authenticated caller (id, type,
+  optional tenant, display name, roles). Its presence is not proof of
+  authentication.
+- `PrincipalType` — `'user' | 'service' | 'system'`.
+- `TenantContext` — the tenant an operation is scoped to. Must be derived
+  server-side from the authenticated session, never from client input.
+- `AuthorizationDecision` / `AuthorizationEffect` — a _description_ of an
+  allow/deny outcome. No evaluation logic is provided; the real decision must be
+  produced and enforced server-side and must fail closed.
 
-This package may define shared authorization mechanisms.
+## Boundary / what does NOT belong here
 
-Individual domains remain responsible for defining the permissions and
-policies associated with their own resources.
+- No token/session/credential handling.
+- No policy evaluation or access-control enforcement.
+- No provider SDKs or network calls.
+- No tenant-specific or domain-specific permission catalogues.
 
-## Planned Contents
+## Testing
 
-```text
-src/
-├── authentication/
-├── authorization/
-├── permissions/
-├── policies/
-├── tenant-context/
-├── service-identity/
-└── testing/
+Type-shape tests live in `src/index.test.ts` and run with Vitest. They exist
+purely to lock the placeholder contract shapes; there is no runtime behavior to
+exercise.

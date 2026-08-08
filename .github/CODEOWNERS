@@ -1,0 +1,24 @@
+# CODEOWNERS for PlatformTrust
+#
+# =============================== ACTION REQUIRED ===============================
+# The owner handle below is a PLACEHOLDER and MUST be replaced before enabling
+# "Require review from Code Owners" in branch protection.
+#
+#   Replace  @platformtrust/PLACEHOLDER-owners  with the real GitHub user or team
+#   that owns this repository (e.g. an actual org team such as @your-org/your-team).
+#
+# Until a REAL, EXISTING GitHub owner/team is set here, GitHub cannot assign code
+# owners and required-code-owner-review branch protection will not function.
+# Do NOT enable required code owner reviews while this placeholder is in place.
+# ==============================================================================
+
+# Default owner for everything in the repository.
+*       @platformtrust/PLACEHOLDER-owners
+
+# Add more specific rules below as the team structure is defined, e.g.:
+#   /apps/web/            @platformtrust/PLACEHOLDER-frontend
+#   /apps/api/            @platformtrust/PLACEHOLDER-backend
+#   /apps/worker/         @platformtrust/PLACEHOLDER-backend
+#   /apps/ai-service/     @platformtrust/PLACEHOLDER-ai
+#   /infrastructure/      @platformtrust/PLACEHOLDER-platform
+#   /docs/                @platformtrust/PLACEHOLDER-owners

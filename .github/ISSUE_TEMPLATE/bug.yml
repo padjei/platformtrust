@@ -1,13 +1,17 @@
 name: Bug report
-description: Report a defect in AI PlatformTrust
-title: "[Bug]: "
-labels: ["bug"]
+description: Report a defect in PlatformTrust
+title: '[Bug]: '
+labels: ['type:bug']
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting a bug. Please do NOT include secrets, tokens, or
-        personally identifiable information in this report.
+        Thanks for reporting a bug. Please provide enough detail for us to reproduce it.
+
+        Do NOT paste secrets, credentials, tokens, connector payloads, PII, or real
+        customer data in this issue. Redact logs before pasting. If this is a security
+        vulnerability, do NOT use this template — see the private reporting option in
+        the issue chooser and in SECURITY.md.
 
   - type: textarea
     id: description
@@ -51,9 +55,10 @@ body:
       label: Environment
       description: Where the bug occurred.
       placeholder: |
-        - Environment: local / staging / production
-        - Browser / client:
-        - App version / commit SHA:
+        - Affected app/service (web / api / worker / ai-service):
+        - Environment (local / staging / production):
+        - Browser / OS (if UI):
+        - Version / commit SHA:
     validations:
       required: true
 
@@ -61,7 +66,7 @@ body:
     id: tenant-impact
     attributes:
       label: Tenant impact
-      description: How does this affect tenants?
+      description: How does this affect tenants? Describe impact only; do NOT include tenant-identifying data.
       options:
         - Single tenant only
         - Multiple tenants
@@ -74,9 +79,11 @@ body:
   - type: textarea
     id: logs
     attributes:
-      label: Logs / screenshots
-      description: Relevant logs or screenshots. Redact all sensitive data.
-      render: text
+      label: Relevant logs (redacted)
+      description: >-
+        Paste any relevant error output or stack traces. Remove all secrets,
+        tokens, and PII first.
+      render: shell
     validations:
       required: false
 
