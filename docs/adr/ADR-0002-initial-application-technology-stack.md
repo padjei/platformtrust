@@ -5,7 +5,7 @@
 Accepted — 2026-08-07. Ratified under PT-001 with architecture review.
 
 **This ADR supersedes the "Approved Stack → Backend" entry in `CLAUDE.md`** (which
-previously named Python/FastAPI/Pydantic/SQLAlchemy/Alembic as the primary backend).
+previously named a Python/FastAPI-based stack as the primary backend).
 Per the Constitution's precedence order (§2), an Accepted ADR outranks the
 engineering standards in `CLAUDE.md`. This supersession is explicit, not silent
 (Constitution §6), was approved through architecture review (the
@@ -108,9 +108,8 @@ Negative / trade-offs:
   change set). Contributors must be aware NestJS is now the primary API.
 - Two backend runtimes (Node/TS and Python) increase the toolchain surface and CI
   matrix.
-- SQLAlchemy/Alembic (Python ORM/migrations named in the old standard) do not apply
-  to a NestJS API; the future database/ORM decision is deferred to a later ADR and
-  explicitly out of scope here.
+- Database and ORM selection are out of scope for this decision and remain
+  deferred to a future ADR.
 
 ## Security Impact
 
@@ -140,11 +139,11 @@ Negative / trade-offs:
 - Greenfield: no runtime or data migration. This ADR migrates the *documented
   standard* — `CLAUDE.md`'s "Approved Stack → Backend" is updated to reference this
   ADR and reflect NestJS as the primary API with FastAPI scoped to the AI service.
-- The prior `docs/decisions/ADR-001..004` (modular monolith, PostgreSQL, Azure,
-  deterministic scoring) remain valid; the modular-monolith stance is preserved
-  (this ADR only changes the backend framework, not the architecture style).
-- Database/ORM selection (previously implied by SQLAlchemy/Alembic) is deferred to
-  a future ADR and is out of scope for PT-001.
+- Earlier `docs/decisions/` ADRs remain in the repository as history; this ADR
+  changes only the backend framework, not the modular-monolith architecture style,
+  and does not decide database or cloud technology.
+- Database, ORM, secret-management, and cloud selection are out of scope for this
+  ADR and remain deferred to future ADRs.
 
 ## References
 

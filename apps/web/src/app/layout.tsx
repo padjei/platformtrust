@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'PlatformTrust',
-  description: 'AI Trust Operations Platform — AI Readiness Auditor.',
+  description: 'PlatformTrust web application.',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

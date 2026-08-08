@@ -11,9 +11,9 @@ PlatformTrust.
 
 The types here describe the _shape_ of concepts the platform will use once a real
 auth layer exists. Actual authentication and **server-side** authorization —
-deny by default, least privilege, tenant isolation enforced in the API and in
-PostgreSQL Row-Level Security — must be implemented in the API/service layers.
-The concrete auth provider selection is **deferred to a future ADR**.
+deny by default, least privilege, tenant isolation enforced server-side — must be
+implemented in the API/service layers. The concrete auth provider selection is
+**deferred to a future ADR**.
 
 ## Exported contracts
 

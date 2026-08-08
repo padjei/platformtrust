@@ -6,11 +6,11 @@ changes to PlatformTrust. It aligns with the
 §12 Commits, §13 Pull Requests) and the
 [Constitution](docs/constitution/PLATFORMTRUST_CONSTITUTION.md).
 
-Before starting, understand the product invariants: multi-tenant isolation via
-`tenant_id` + PostgreSQL RLS, deny-by-default server-side authorization,
-deterministic scoring, LLM output never deciding pass/fail or authorization,
-human-approved production remediation, read-only-by-default connectors, and
-auditability of privileged actions.
+Before starting, understand the governing invariants defined by the Constitution
+and Engineering Handbook: mandatory multi-tenant isolation enforced server-side,
+deny-by-default server-side authorization, and auditability of privileged
+actions. Data, cloud, and authentication technologies are not decided in this
+repository and are deferred to future ADRs.
 
 ## 1. Every change starts with an issue
 
@@ -121,8 +121,8 @@ uv run pytest
 ## 7. Security & scope
 
 - Never commit secrets, credentials, tokens, PII, or customer data.
-- Enforce authorization server-side; derive `tenant_id` from the authenticated
-  context, never from client input.
+- Enforce authorization and tenant scoping server-side; never trust the client
+  for identity, tenant, or authorization decisions.
 - Do not bundle unrelated refactoring into a feature or fix PR.
 
 See [`SECURITY.md`](SECURITY.md) for vulnerability reporting and secret-exposure

@@ -1,8 +1,10 @@
 # Security Policy
 
-Security is foundational to PlatformTrust, a multi-tenant AI Trust Operations
-Platform. This document explains how to report vulnerabilities and describes our
-baseline security practices.
+Security is foundational to PlatformTrust, a multi-tenant enterprise platform.
+This document explains how to report vulnerabilities and describes our baseline
+security practices. Security principles are defined by the
+[Constitution](docs/constitution/PLATFORMTRUST_CONSTITUTION.md) and the
+[Engineering Handbook](docs/handbook/ENGINEERING_HANDBOOK.md).
 
 ## Reporting a vulnerability (private disclosure)
 
@@ -51,27 +53,28 @@ Preventive requirements:
 - **Never commit secrets, credentials, tokens, PII, or customer data** to the
   repository, logs, test fixtures, screenshots, or prompts.
 - `.env.example` contains **placeholders only** and must never hold real values.
-  Load real secrets from the environment / Azure Key Vault at runtime.
+  Load real secrets from the platform secret manager at runtime.
 
 ## Encryption
 
 - **In transit:** all external traffic uses TLS (HTTPS); service-to-service
   traffic is encrypted in transit.
-- **At rest:** databases, evidence storage, and secrets are encrypted at rest via
-  platform-managed encryption and a key vault.
+- **At rest:** sensitive data is encrypted at rest using platform-managed
+  encryption. Specific storage technologies are defined by future ADRs.
 
 ## Tenant isolation
 
-Every tenant-owned record carries a `tenant_id`. Isolation is enforced both in
-the API layer and by PostgreSQL Row-Level Security (RLS). RLS must never be
-disabled or bypassed, and `tenant_id` must never be derived from client input.
+PlatformTrust is multi-tenant, and tenant isolation is mandatory. Isolation must
+be enforced **server-side** and must never rely on the client or frontend. The
+specific persistence-layer isolation mechanism is governed by the Constitution
+and future data ADRs, and is not decided in this repository.
 
 ## Supported releases
 
 _(placeholder policy — confirm before launch)_
 
-During the MVP phase, only the current `main` branch and the latest tagged
-release receive security updates.
+At this stage of development, only the current `main` branch and the latest
+tagged release receive security updates.
 
 | Version          | Supported |
 | ---------------- | --------- |
@@ -82,6 +85,5 @@ release receive security updates.
 ## Compliance status
 
 PlatformTrust does **not** currently claim any compliance certification,
-including but not limited to **SOC 2, ISO 27001, FedRAMP, HIPAA, or CMMC**. The
-platform helps organizations assess _their_ AI readiness; it is not itself
-certified against these frameworks, and it must not be represented as certified.
+including but not limited to **SOC 2, ISO 27001, FedRAMP, HIPAA, or CMMC**. It is
+not certified against these frameworks and must not be represented as certified.

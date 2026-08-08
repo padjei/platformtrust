@@ -15,7 +15,7 @@ body:
         If you have found an exploitable vulnerability, report it **privately**:
 
         - Use the private reporting channel described in
-          [SECURITY.md](https://github.com/platformtrust/platformtrust/blob/main/SECURITY.md).
+          [SECURITY.md](https://github.com/padjei/platformtrust/blob/main/SECURITY.md).
         - Do not post reproduction steps or exploit details in this issue.
 
         Use this template ONLY for non-sensitive, already-mitigated, or general

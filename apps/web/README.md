@@ -1,7 +1,7 @@
 # @platformtrust/web
 
 The PlatformTrust web surface — a Next.js (App Router) + TypeScript application.
-This is the minimal landing shell for the AI Readiness Auditor MVP (PT-001 FR-005).
+This is the minimal landing shell created under PT-001 (FR-005).
 
 It renders the product name, a platform-initialization message, and safe
 build/environment information, and exposes a machine-readable health endpoint.

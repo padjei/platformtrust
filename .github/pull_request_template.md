@@ -40,7 +40,7 @@
 
 ## Tenant isolation impact
 
-<!-- How is the tenant boundary preserved? tenant_id scoping + RLS for any new data path. "N/A" if none. -->
+<!-- How is the tenant boundary preserved? Isolation must be enforced server-side for any new data path. "N/A" if none. -->
 
 ## Database impact
 

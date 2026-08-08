@@ -1,7 +1,7 @@
 import { Button } from '@platformtrust/ui';
 import { SERVICE_NAMES, SHARED_PACKAGE_VERSION } from '@platformtrust/shared';
 
-const DOCS_URL = 'https://github.com/platformtrust/platformtrust/tree/main/docs';
+const DOCS_URL = 'https://github.com/padjei/platformtrust/tree/main/docs';
 
 export default function HomePage() {
   // NODE_ENV is safe, non-sensitive build/environment information.

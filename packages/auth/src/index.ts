@@ -12,9 +12,9 @@
  *
  * Importing these types does NOT authenticate a caller and does NOT authorize
  * any action. Real authentication and server-side authorization must be
- * implemented in the API/service layers per the security rules (deny by default,
- * least privilege, tenant isolation enforced in the API and PostgreSQL RLS).
- * The concrete auth provider selection is deferred to a future ADR.
+ * implemented in the API/service layers per the governance rules (deny by
+ * default, least privilege, tenant isolation enforced server-side). The concrete
+ * auth provider selection is deferred to a future ADR.
  */
 
 /**

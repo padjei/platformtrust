@@ -1,71 +1,59 @@
 # PlatformTrust
 
-PlatformTrust is a multi-tenant **AI Trust Operations Platform**. It helps
-organizations operate AI responsibly across its full lifecycle:
+PlatformTrust is a multi-tenant enterprise platform. This repository is the
+PlatformTrust monorepo; it contains the platform's applications, shared packages,
+and supporting tooling.
 
-- **Assess AI readiness** across data, security, governance, infrastructure, and
-  operational domains.
-- **Identify gaps** and explain their business impact.
-- **Create remediation roadmaps** with prioritized, actionable steps.
-- **Convert approved readiness controls into continuous monitors.**
-- **Detect failures and drift** after go-live.
-- **Support approval-based remediation** with a human in the loop.
+Product behavior, architecture beyond the application stack, and any data, cloud,
+or security implementation decisions are governed by the
+[Constitution](docs/constitution/PLATFORMTRUST_CONSTITUTION.md), the
+[Engineering Handbook](docs/handbook/ENGINEERING_HANDBOOK.md), and the
+[Architecture Decision Records](docs/adr/) — not by this README.
 
-The platform is **cloud-neutral, application-neutral, and model-neutral**.
-Salesforce is an _initial connector_, not a dependency.
+## Approved application stack
 
-> **Current milestone:** AI Readiness Auditor MVP.
+Defined by [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md):
 
-## Core principles
+- **Next.js** — web frontend (`apps/web`)
+- **NestJS** — primary API (`apps/api`) and standalone worker (`apps/worker`)
+- **FastAPI (Python 3.12)** — separate AI service (`apps/ai-service`)
+- **TypeScript** and **Python** as the implementation languages
 
-- Every tenant-owned record carries a `tenant_id`. Tenant isolation is enforced
-  in the API **and** in PostgreSQL via Row-Level Security (RLS).
-- Authorization is **deny-by-default** and enforced server-side.
-- UUIDs for all public/internal IDs; UTC for all persisted timestamps.
-- All schema changes ship as migrations.
-- **Readiness scoring is deterministic.** LLM output never decides pass/fail,
-  authorization, compliance status, or risk scores; machine-readable AI output is
-  schema-validated.
-- Production remediation requires **human approval**.
-- Default connector permissions are **read-only**.
-- Every privileged action produces an audit event.
+Database, ORM, cloud, secret-management, and authentication technologies are
+**not selected in this repository** and are deferred to future ADRs.
 
 ## Repository structure
 
 This is a [pnpm workspace](https://pnpm.io/workspaces) monorepo orchestrated with
-[Turborepo](https://turbo.build/).
+[Turborepo](https://turbo.build/). See
+[ADR-0001](docs/adr/ADR-0001-use-platformtrust-monorepo.md).
 
 ```text
 platformtrust/
 ├── apps/
-│   ├── web/            # Next.js frontend (React, TypeScript, Tailwind, shadcn/ui)
-│   ├── api/            # NestJS backend API (primary backend)
-│   ├── worker/         # NestJS standalone worker (background jobs, monitors, scans)
-│   └── ai-service/     # Python 3.12 + FastAPI AI service (separate, model-neutral process)
+│   ├── web/            # Next.js frontend (TypeScript)
+│   ├── api/            # NestJS API (primary backend)
+│   ├── worker/         # NestJS standalone worker
+│   └── ai-service/     # FastAPI AI service (Python 3.12, separate process)
 ├── packages/
-│   ├── config/         # Shared build/lint/tsconfig and runtime config helpers
+│   ├── config/         # Shared build/lint/tsconfig config helpers
 │   ├── shared/         # Shared TypeScript utilities and types
-│   ├── auth/           # Authentication / authorization primitives
-│   ├── database/       # Database access, schema, and migration tooling
-│   ├── sdk/            # Internal SDK / client contracts
+│   ├── auth/           # Auth contract types (placeholder; no behavior)
+│   ├── database/       # Database configuration boundary (placeholder)
+│   ├── sdk/            # Internal client-contract types (placeholder)
 │   └── ui/             # Shared UI component library
-├── infrastructure/     # Terraform, Docker, and deployment configuration
+├── infrastructure/     # Infrastructure configuration
 └── docs/               # Constitution, engineering handbook, ADRs, and design docs
 ```
 
-> Some additional workspace packages (e.g. connector SDK, control library, event
-> schema) may be present as the platform evolves; the list above covers the core
-> layout.
-
-Applications are independent deployables and must not import from one another;
-shared code lives in `packages/*`. This boundary is enforced by
+Applications are independently buildable/testable and must not import from one
+another; shared code lives in `packages/*`. This boundary is enforced by
 [`scripts/check-app-boundaries.mjs`](scripts/check-app-boundaries.mjs) (see
 [`tests/architecture/README.md`](tests/architecture/README.md)).
 
 ## Prerequisites
 
-- **Node.js 22** — the version is pinned in [`.nvmrc`](.nvmrc)
-  (`nvm use` will select it).
+- **Node.js 22** — pinned in [`.nvmrc`](.nvmrc) (`nvm use` will select it).
 - **pnpm 9** — enabled via [Corepack](https://nodejs.org/api/corepack.html); the
   exact version is pinned in `package.json` (`packageManager`).
 - **Python 3.12** + **[uv](https://docs.astral.sh/uv/)** — required only for
@@ -132,12 +120,6 @@ Run the full TypeScript test suite:
 pnpm test
 ```
 
-With coverage:
-
-```bash
-pnpm test:coverage
-```
-
 Run the AI service tests:
 
 ```bash
@@ -147,12 +129,12 @@ uv run pytest
 
 ## Health endpoints
 
-| Service    | Health endpoint                                                                           |
-| ---------- | ----------------------------------------------------------------------------------------- |
-| web        | `GET /health`                                                                             |
-| api        | `GET /api/v1/health`                                                                      |
-| ai-service | `GET /api/v1/health`                                                                      |
-| worker     | Internal health-state (no public HTTP endpoint; exposed via its process/monitoring hooks) |
+| Service    | Health endpoint                                          |
+| ---------- | -------------------------------------------------------- |
+| web        | `GET /health`                                            |
+| api        | `GET /api/v1/health`                                     |
+| ai-service | `GET /api/v1/health`                                     |
+| worker     | Internal health-state function (no public HTTP endpoint) |
 
 ## Contributing
 

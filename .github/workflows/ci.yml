@@ -58,17 +58,6 @@ jobs:
       - name: Architecture boundary check
         run: node scripts/check-app-boundaries.mjs
 
-      - name: Upload coverage artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ts-coverage
-          path: |
-            **/coverage/**
-            !**/node_modules/**
-          if-no-files-found: ignore
-          retention-days: 7
-
   python:
     name: Python AI service (ruff, mypy, pytest)
     runs-on: ubuntu-latest
@@ -104,15 +93,3 @@ jobs:
 
       - name: Test (pytest)
         run: uv run pytest
-
-      - name: Upload coverage artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-service-coverage
-          path: |
-            apps/ai-service/coverage/**
-            apps/ai-service/htmlcov/**
-            apps/ai-service/coverage.xml
-          if-no-files-found: ignore
-          retention-days: 7

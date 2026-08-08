@@ -54,24 +54,24 @@ AI service (separate process):
 > Superseded by [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md)
 > (Accepted, PT-001, with architecture review). The primary backend is now NestJS
 > (TypeScript); FastAPI is scoped to the separate AI service. The previously
-> approved Python/FastAPI/Pydantic/SQLAlchemy/Alembic backend no longer applies.
+> approved Python-based backend stack no longer applies.
 > Database/ORM selection is deferred to a future ADR.
 
 Data:
 
-- PostgreSQL
-- PostgreSQL Row-Level Security
-- Azure Blob Storage for evidence files
-- Redis only when justified
+> Deferred by [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md).
+> Database, ORM, secret-management, and data-storage technologies are NOT selected
+> yet and are deferred to a future data ADR. No database or storage provider is
+> approved by this document.
 
 Infrastructure:
 
 - Docker
-- Azure Container Apps
-- Azure Database for PostgreSQL
-- Azure Key Vault
 - Terraform
 - GitHub Actions
+
+> Cloud/hosting provider selection is deferred to a future ADR; no cloud provider
+> is approved by this document.
 
 Testing:
 
@@ -87,8 +87,8 @@ Testing:
 
 - Start as a modular monolith.
 - Maintain clear module boundaries.
-- Every tenant-owned database record must include `tenant_id`.
-- Tenant isolation must be enforced in the API and PostgreSQL RLS.
+- Tenant isolation is mandatory and must be enforced server-side (the
+  persistence-layer isolation mechanism is deferred to a future data ADR).
 - Never trust a tenant identifier supplied only by the client.
 - Use UUIDs for public and internal resource identifiers.
 - Use UTC for all persisted timestamps.
@@ -236,7 +236,8 @@ are unspecified:
 
 Every change must preserve:
 
-- **Multi-tenancy** — `tenant_id` on tenant-owned data, enforced in API and RLS.
+- **Multi-tenancy** — tenant isolation is mandatory and enforced server-side
+  (the persistence-layer mechanism is deferred to a future data ADR).
 - **Deny-by-default authorization** — access is denied unless explicitly granted,
   enforced server-side.
 - **Auditability** — privileged/state-changing actions produce audit events.
