@@ -1,266 +1,144 @@
-# AI PlatformTrust
+# PlatformTrust — Claude Code Operating Guide
 
-## Product Mission
+This file tells implementation agents (Claude Code) **how to work** in this
+repository. It is an operating guide, **not** a product or architecture source of
+truth, and it does not itself approve any product behavior, technology, or
+provider.
 
-AI PlatformTrust is a multi-tenant AI Trust Operations Platform.
+Authoritative sources, in precedence order (highest first). When they conflict,
+**surface the conflict — do not silently resolve it**:
 
-It helps organizations:
+1. Applicable law and regulatory requirements.
+2. [PlatformTrust Constitution](docs/constitution/PLATFORMTRUST_CONSTITUTION.md).
+3. Approved security and privacy requirements.
+4. **Accepted** Architecture Decision Records in [`docs/adr/`](docs/adr/).
+5. [Engineering Handbook](docs/handbook/ENGINEERING_HANDBOOK.md).
+6. Engineering standards in [`docs/standards/`](docs/standards/README.md).
+7. Approved PRDs / epics.
+8. Approved implementation tickets.
+9. Implementation preferences.
 
-1. Assess readiness for AI.
-2. Identify data, security, governance, infrastructure, and operational gaps.
-3. Create remediation roadmaps.
-4. Convert approved readiness controls into continuous monitors.
-5. Detect failures and drift across applications, cloud platforms, data systems,
-   integrations, storage services, and AI workloads.
-6. Explain business impact and support approval-based remediation.
+## Before you change anything
 
-The product must remain cloud-neutral, application-neutral, and model-neutral.
-Salesforce is an initial connector, not a platform dependency.
+Read, in order:
 
-## Current Build Phase
+1. The [Constitution](docs/constitution/PLATFORMTRUST_CONSTITUTION.md).
+2. The [Engineering Handbook](docs/handbook/ENGINEERING_HANDBOOK.md).
+3. The **Accepted** ADRs in [`docs/adr/`](docs/adr/). Treat any ADR whose status
+   is **Proposed** as a proposal only — **not** approved architecture.
+4. The relevant [engineering standards](docs/standards/README.md).
+5. The complete implementation issue — every acceptance criterion and every
+   linked document, not just the title or summary.
+6. The current implementation, before proposing changes.
 
-The current milestone is the AI Readiness Auditor MVP.
+## Operating rules
 
-Do not implement advanced continuous monitoring, autonomous remediation,
-customer-side agents, Kafka, Kubernetes, Neo4j, or ClickHouse unless the
-current GitHub issue explicitly requires it.
+- **Report conflicts rather than inventing behavior.** If a requirement is
+  ambiguous, or would require inventing product behavior, permissions, data
+  schemas, API contracts, tenant rules, AI authority, or UX, stop and report it
+  instead of guessing (Constitution §3.3).
+- **Do not invent or select** product behavior, architecture, or technologies
+  that are not established by an authoritative source above.
+- **Technology choices not yet ratified by an Accepted ADR are deferred** — do
+  not select a database, ORM, authentication/identity provider, cloud provider,
+  secret manager, queue/message broker, AI model/provider, vector database, or
+  observability/logging vendor.
+- **Do not self-approve architecture.** You may author an ADR **proposal**, but
+  you must not declare your own proposed ADR Accepted; architecture and security
+  approval is performed by designated human reviewers.
+- Make **no unrelated changes**; keep the diff scoped to the issue.
+- **Never commit** secrets, credentials, tokens, private keys, PII, or customer
+  data — in source, logs, tests, fixtures, or prompts.
 
-Read `docs/product/MVP_SCOPE.md` before planning any feature.
+## Invariants to preserve
 
-## Approved Stack
+Every change must preserve these constitutional invariants:
 
-Frontend:
+- **Multi-tenancy** — tenant isolation is mandatory and enforced server-side;
+  frontend filtering is never an isolation control. The persistence-layer
+  mechanism is deferred to a future data ADR.
+- **Deny-by-default authorization** — access is denied unless explicitly granted,
+  enforced server-side; client-supplied identity/tenant is never trusted.
+- **Auditability** — privileged/state-changing actions produce durable audit
+  events.
+- **Accessibility** — user-facing changes meet WCAG 2.2 AA expectations.
+- **Testability** — new behavior ships with tests, including tenant-isolation and
+  authorization-failure coverage where applicable.
+- **Observability** — structured logging and surfaced errors, with no secrets or
+  sensitive data.
+- **AI authority** — AI is advisory by default; humans retain authority over
+  high-impact decisions, and AI output is not treated as verified system fact
+  (see [AI Engineering Standard](docs/standards/AI_ENGINEERING_STANDARD.md)).
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- shadcn/ui
-- TanStack Query
-- React Hook Form
-- Zod
+## Approved application stack
 
-Backend:
+Ratified by [ADR-0001](docs/adr/ADR-0001-use-platformtrust-monorepo.md) (monorepo)
+and [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md) (stack):
 
-- TypeScript
-- NestJS (primary API and standalone worker)
+- **Monorepo** — pnpm workspaces + Turborepo (Node 22, pnpm 9).
+- **Web** — Next.js + TypeScript (`apps/web`).
+- **API** — NestJS + TypeScript (`apps/api`); the authoritative HTTP/API process.
+- **Worker** — NestJS standalone (`apps/worker`).
+- **AI service** — FastAPI + Python 3.12 via uv (`apps/ai-service`).
+- **Shared packages** — `packages/{config,shared,auth,database,sdk,ui}`.
 
-AI service (separate process):
+Applications must not import another application's source; shared code lives in
+`packages/*` (enforced by
+[`scripts/check-app-boundaries.mjs`](scripts/check-app-boundaries.mjs)).
 
-- Python 3.12
-- FastAPI
-- uv
+Data storage, cloud/hosting, secret management, identity, queueing, and
+AI-provider technologies are **not selected** in the repository yet and are
+deferred to future ADRs.
 
-> Superseded by [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md)
-> (Accepted, PT-001, with architecture review). The primary backend is now NestJS
-> (TypeScript); FastAPI is scoped to the separate AI service. The previously
-> approved Python-based backend stack no longer applies.
-> Database/ORM selection is deferred to a future ADR.
+## Validation commands
 
-Data:
+There is no `make` target. Use the repository toolchain. From the repository root:
 
-> Deferred by [ADR-0002](docs/adr/ADR-0002-initial-application-technology-stack.md).
-> Database, ORM, secret-management, and data-storage technologies are NOT selected
-> yet and are deferred to a future data ADR. No database or storage provider is
-> approved by this document.
+- `pnpm format:check`
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test`
+- `pnpm build`
+- `node scripts/check-app-boundaries.mjs`
 
-Infrastructure:
+From `apps/ai-service`:
 
-- Docker
-- Terraform
-- GitHub Actions
+- `uv sync --frozen`
+- `uv run ruff check .`
+- `uv run ruff format --check .`
+- `uv run mypy .`
+- `uv run pytest`
 
-> Cloud/hosting provider selection is deferred to a future ADR; no cloud provider
-> is approved by this document.
+Run every applicable check before declaring work complete. If a command is
+missing or broken, report it and fix the repository tooling rather than silently
+bypassing it.
 
-Testing:
+## Git and pull requests
 
-- Pytest
-- Playwright
-- Testcontainers
-- Ruff
-- mypy
-- ESLint
-- TypeScript strict mode
-
-## Architecture Rules
-
-- Start as a modular monolith.
-- Maintain clear module boundaries.
-- Tenant isolation is mandatory and must be enforced server-side (the
-  persistence-layer isolation mechanism is deferred to a future data ADR).
-- Never trust a tenant identifier supplied only by the client.
-- Use UUIDs for public and internal resource identifiers.
-- Use UTC for all persisted timestamps.
-- Use database migrations for every schema change.
-- Do not modify existing migrations after they have been committed.
-- Keep provider-specific formats inside connector adapters.
-- Normalize external events into the PlatformTrust event schema.
-- Keep readiness scoring deterministic.
-- LLM output must not determine control pass/fail, authorization, compliance
-  status, production changes, or final risk scores.
-- AI-generated machine-readable output must be schema validated.
-- Production remediation requires explicit human approval.
-- Default connector permissions must be read-only.
-
-## Security Rules
-
-- Never commit credentials, secrets, tokens, private keys, customer data, or PII.
-- Never place real customer data in fixtures, screenshots, logs, or prompts.
-- Use parameterized queries only.
-- Validate all API inputs.
-- Enforce authorization server-side.
-- Encrypt evidence in transit and at rest.
-- Log security-relevant actions without logging sensitive payloads.
-- Every privileged action must create an audit event.
-- Treat uploaded files and connector data as untrusted input.
-- No compliance or certification claim may be added without documented proof.
-
-Read:
-
-- `docs/security/THREAT_MODEL.md`
-- `docs/security/TENANT_ISOLATION.md`
-- `.claude/rules/security.md`
-
-## Development Workflow
-
-For every GitHub issue:
-
-1. Read the issue, acceptance criteria, referenced documentation, and ADRs.
-2. Inspect the existing implementation before proposing changes.
-3. Produce a written implementation plan before editing code.
-4. Identify database, API, UI, security, testing, and migration impact.
-5. Implement the smallest complete vertical slice.
-6. Add or update tests.
-7. Run all relevant validation commands.
-8. Review the final diff for security, tenancy, and scope violations.
-9. Update documentation when behavior or architecture changes.
-10. Do not commit unrelated refactoring.
-
-Never push directly to `main`.
-
-## Required Commands
-
-Use repository commands rather than inventing alternatives:
-
-- `make setup`
-- `make dev`
-- `make lint`
-- `make typecheck`
-- `make test`
-- `make test-integration`
-- `make test-e2e`
-- `make security-check`
-- `make verify`
-
-If a command is missing or broken, report it and fix the repository tooling
-rather than silently bypassing it.
+- `main` is protected and deployable. **Never push directly to `main`.**
+- Branch as `<type>/PT-###-slug`; use Conventional Commits (enforced by
+  Commitlint). Squash-merge is preferred.
+- Open a pull request into `main` with scope matched to the issue. See the
+  [Git Standard](docs/standards/GIT_STANDARD.md) and
+  [Pull Request Standard](docs/standards/PULL_REQUEST_STANDARD.md).
 
 ## Definition of Done
 
-A feature is complete only when:
+Follow the [Definition of Done](docs/standards/DEFINITION_OF_DONE.md).
 
-- Acceptance criteria are satisfied.
-- Authorization and tenant isolation are enforced.
-- Inputs and outputs are validated.
-- Database migrations are included when required.
-- Unit tests are present.
-- Integration tests cover important boundaries.
-- Relevant end-to-end behavior is tested.
-- Audit logging is included where appropriate.
-- Error handling is explicit.
-- Documentation is updated.
-- `make verify` passes.
-- No secrets or sensitive data appear in the diff.
-- No unresolved TODO placeholders remain in the feature.
+**Always required:** acceptance criteria met; required tests pass; lint, type,
+and static checks pass; no secrets committed; documentation current; no
+unresolved critical/high findings; scope respected.
 
-## Prohibited Shortcuts
+**Conditionally required** (only when the change touches that concern):
+authorization tests; tenant-isolation tests; database migration; audit events;
+accessibility validation; performance validation; AI evaluations; rollback plan;
+security review; an ADR.
 
-Do not:
+## Governance and standards index
 
-- Build the entire product in one task.
-- Disable tests to make CI pass.
-- Use mock data in production paths.
-- bypass authorization temporarily.
-- use `any` to suppress TypeScript design problems.
-- catch exceptions without logging or handling them.
-- add a new dependency without explaining its purpose.
-- expose cloud credentials to the browser.
-- let an LLM execute production remediation directly.
-- claim SOC 2, ISO 27001, FedRAMP, HIPAA, CMMC, or other certification.
-- implement functionality outside the current issue.
-
-## Documentation Index
-
-- Product requirements: `docs/product/PRD.md`
-- MVP scope: `docs/product/MVP_SCOPE.md`
-- Architecture: `docs/architecture/SYSTEM_ARCHITECTURE.md`
-- Domain model: `docs/architecture/DOMAIN_MODEL.md`
-- Trust graph: `docs/architecture/TRUST_GRAPH.md`
-- Connector framework: `docs/architecture/CONNECTOR_FRAMEWORK.md`
-- Security model: `docs/security/THREAT_MODEL.md`
-- Readiness domains: `docs/frameworks/READINESS_DOMAINS.md`
-- Scoring model: `docs/frameworks/SCORING_MODEL.md`
-
-## PT-001 / Implementation Rules
-
-These rules apply to every implementation task and complement (do not replace)
-the sections above.
-
-### Required reading before implementing
-
-Before proposing or making changes, read:
-
-- `docs/constitution/PLATFORMTRUST_CONSTITUTION.md`
-- `docs/handbook/ENGINEERING_HANDBOOK.md`
-- The relevant Architecture Decision Records in `docs/adr/`
-- The complete implementation issue — every acceptance criterion and every
-  linked document — not just the title or summary.
-
-### Never invent product behavior
-
-Do not invent or assume any of the following; derive them only from the issue,
-the constitution, the handbook, ADRs, or existing code, and stop to ask if they
-are unspecified:
-
-- Product behavior or feature semantics
-- Permissions, roles, or authorization rules
-- Database schemas, columns, or relationships
-- API endpoints, contracts, or response shapes
-- Tenant rules or isolation boundaries
-- AI/LLM authority (an LLM never decides pass/fail, authorization, compliance,
-  or scoring)
-- UX flows, copy, or component behavior
-
-### Invariants to preserve
-
-Every change must preserve:
-
-- **Multi-tenancy** — tenant isolation is mandatory and enforced server-side
-  (the persistence-layer mechanism is deferred to a future data ADR).
-- **Deny-by-default authorization** — access is denied unless explicitly granted,
-  enforced server-side.
-- **Auditability** — privileged/state-changing actions produce audit events.
-- **Accessibility** — user-facing changes meet accessibility expectations
-  (keyboard, screen-reader, contrast, explicit loading/empty/error states).
-- **Testability** — code is structured to be tested; new behavior ships with
-  tests, including tenant-isolation and authorization-failure coverage.
-- **Observability** — meaningful, structured logging (no secrets/PII) and
-  surfaced errors.
-
-### Stop and report material conflicts
-
-If the issue conflicts with the constitution, handbook, ADRs, existing behavior,
-or these invariants — or if a requirement is ambiguous or appears to require
-inventing behavior — stop and report the conflict instead of guessing or working
-around it.
-
-### Scope, secrets, and validation
-
-- Make no unrelated modifications; keep the diff scoped to the issue.
-- Never commit secrets, credentials, tokens, PII, or customer data.
-- Before declaring work complete, run all required validation:
-  `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`,
-  `node scripts/check-app-boundaries.mjs`, and — for `apps/ai-service` —
-  `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy .`, and
-  `uv run pytest`.
+- Constitution — [`docs/constitution/PLATFORMTRUST_CONSTITUTION.md`](docs/constitution/PLATFORMTRUST_CONSTITUTION.md)
+- Engineering Handbook — [`docs/handbook/ENGINEERING_HANDBOOK.md`](docs/handbook/ENGINEERING_HANDBOOK.md)
+- Architecture Decision Records — [`docs/adr/`](docs/adr/)
+- Engineering standards — [`docs/standards/README.md`](docs/standards/README.md)
+- Standards enforcement matrix — [`docs/standards/ENFORCEMENT_MATRIX.md`](docs/standards/ENFORCEMENT_MATRIX.md)
